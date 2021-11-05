@@ -1,7 +1,5 @@
 <template>
-  <!-- <layout> -->
   <router-view></router-view>
-  <!-- </layout> -->
 </template>
 
 <script lang="ts">
@@ -12,6 +10,7 @@ export default class AppComponent extends Vue {
   created() {}
 }
 </script>
+
 <style>
 @import "./assets/styles/bootstrap/bootstrap.min.css";
 @import "./assets/styles/main.less";

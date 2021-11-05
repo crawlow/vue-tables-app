@@ -7,3 +7,4 @@ load.ts
 bin/
 obj/
 /.idea
+.DS_Store

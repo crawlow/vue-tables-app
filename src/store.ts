@@ -238,10 +238,10 @@ export default createStore<State>({
     ]
   },
   mutations: {
-    addEmployee(state: State, employee: EmployeeType) {
+    addEmployee(state, employee: EmployeeType) {
       state.employees.push(employee)
     },
-    deleteEmployee(state: State, index: number) {
+    deleteEmployee(state, index: number) {
       state.employees.splice(index, 1)
     }
   },
@@ -249,15 +249,9 @@ export default createStore<State>({
 
   },
   getters: {
-    employees(state: State) {
+    employees(state) {
       return state.employees
     }
   }
 })
 
-export const key: InjectionKey<Store<State>> = Symbol()
-
-
-export function useStore() {
-  return baseUseStore(key)
-}
