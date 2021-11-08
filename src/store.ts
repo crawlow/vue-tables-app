@@ -9,7 +9,8 @@ export interface EmployeeType {
 }
 
 export interface State {
-  employees: EmployeeType[]
+  employees: EmployeeType[],
+  isSidebarShowed: boolean
 }
 
 export default createStore<State>({
@@ -235,7 +236,8 @@ export default createStore<State>({
         position: 'admin',
         age: 50
       },
-    ]
+    ],
+    isSidebarShowed: false
   },
   mutations: {
     addEmployee(state, employee: EmployeeType) {
@@ -243,14 +245,20 @@ export default createStore<State>({
     },
     deleteEmployee(state, index: number) {
       state.employees.splice(index, 1)
+    },
+    toggleIsSidebarShowed(state) {
+      state.isSidebarShowed = !state.isSidebarShowed
     }
   },
   actions: {
 
   },
   getters: {
-    employees(state) {
+    employees(state): EmployeeType[] {
       return state.employees
+    },
+    isSidebarShowed(state): boolean {
+      return state.isSidebarShowed
     }
   }
 })

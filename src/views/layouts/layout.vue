@@ -27,6 +27,8 @@ import LayoutSidebar from "@layouts/layout-sidebar.vue";
 export default class Layout extends Vue {
 }
 </script>
+
+
 <style lang="less">
 body {
   @font-face {
@@ -45,9 +47,6 @@ body {
   font-style: normal;
   font-weight: normal;
 }
-.content {
-  //background: white;
-}
 .layout {
   display: flex;
   flex-direction: column;
@@ -59,7 +58,6 @@ body {
     overflow-x: auto;
     .content {
       margin: 24px 27px 24px 27px;
-      //flex-grow: 1;
     }
   }
 }
