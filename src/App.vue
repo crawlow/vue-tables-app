@@ -25,7 +25,7 @@ export default class AppComponent extends Vue {
   color: #162147 !important;
   background: white !important;
   height: 35px !important;
-  width: 577px !important;
+  width: 100% !important;
   outline: none !important;
   font-size: 14px !important;
   border-radius: 0;
@@ -38,5 +38,8 @@ export default class AppComponent extends Vue {
 
 .el-select-dropdown__item.selected {
   color: #070054 !important;
+}
+button {
+  cursor: pointer;
 }
 </style>

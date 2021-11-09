@@ -2,7 +2,7 @@
   <div class="container">
     <div class="info">
       <span class="title">Сотрудники</span>
-      <button class="btn" @click="$router.push({name: 'create-employee'})">Добавить сотрудника</button>
+      <button class="btn" @click="$router.push({name: 'edit-or-create-employee'})">Добавить сотрудника</button>
     </div>
     <div class="table-container-big">
       <div class="search">
@@ -33,7 +33,7 @@
               }}</span>
             <span class="col-ceil col-name-age">{{ employee.age }}</span>
             <button class="col-ceil-square" style="margin-right: 1px;">
-              <img src="~@assets/icons/edit.svg" alt="edit">
+              <img src="~@assets/icons/edit.svg" alt="edit" @click="()=>{this.$store.commit('toggleIsEdit'); this.$store.commit('updateEditProduct', employee);$router.push({name: 'edit-or-create-employee'})}">
             </button>
             <button class="col-ceil-square"
                     @click="deleteEmployee(index)"
@@ -97,7 +97,7 @@
           </div>
           <div class="table-small-row">
             <span class="small-col-name">Должность</span>
-            <span class="small-ceil">{{ employee.position }}</span>
+            <span class="small-ceil">{{ employee.position === 'admin' ? 'Администратор' : 'Гость' }}</span>
           </div>
           <div class="table-small-row">
             <span class="small-col-name">Возраст</span>
@@ -105,7 +105,7 @@
           </div>
           <div class="table-small-row">
             <button class="small-table-edit-btn">
-              <img src="~@assets/icons/edit.svg" alt="edit">
+              <img src="~@assets/icons/edit.svg" alt="edit" @click="()=>{this.$store.commit('toggleIsEdit'); this.$store.commit('updateEditProduct', employee); $router.push({name: 'edit-or-create-employee'})}">
             </button>
             <button class="small-table-delete-btn" @click="deleteEmployee(index)">
               <img src="~@assets/icons/trash.svg" alt="trash">
@@ -146,6 +146,21 @@
       </div>
     </div>
   </div>
+  <el-dialog
+      v-model="deleteDialog"
+      title="Удаление сотрдника"
+      width="30%"
+  >
+    <span>Вы действительно хотите удалить сотрудника ?</span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button type="success" @click="deleteDialog = false">Отмена</el-button>
+        <el-button type="danger" @click="()=>{deleteDialog = false; this.$store.commit('deleteEmployee', deleteIndex)}"
+        >Подвердить</el-button
+        >
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script lang="ts">
@@ -165,6 +180,9 @@ export default class Employees2 extends Vue {
   hasNext: boolean = false
   hasPrev: boolean = false
   activePage: number = 1
+  deleteDialog: boolean = false
+  deleteIndex: number
+
   beforeMount() {
     this.totalPages = Math.ceil(this.$store.getters.employees.length / 12)
     for (let i = 1; i <= this.totalPages; i++) {
@@ -177,6 +195,8 @@ export default class Employees2 extends Vue {
   }
   @Watch('$store.getters.employees', {deep: true})
   onEmployeesChange() {
+    if(this.activePage * 12 - 1 > this.$store.getters.employees.length)
+      this.activePage--
     this.totalPages = Math.ceil(this.$store.getters.employees.length / 12)
     if(this.totalPages < this.showingPagesButtons[2]) {
       if(this.showingPagesButtons[2] === 3)
@@ -197,10 +217,15 @@ export default class Employees2 extends Vue {
 
   }
   deleteEmployee(index: number) {
-    this.$store.commit('deleteEmployee', index)
+    this.deleteDialog = true
+    this.deleteIndex = index
   }
   selectPage(page: number) {
     this.activePage = page
+    if(page === this.showingPagesButtons[2])
+      this.nextPage()
+    if(page === this.showingPagesButtons[0])
+      this.prevPage()
   }
   nextPage() {
     if (this.showingPagesButtons[2] + 1 <= this.totalPages) {
@@ -502,6 +527,9 @@ export default class Employees2 extends Vue {
           padding-left: 20px;
           display: flex;
           align-items: center;
+          padding-right: 10px;
+          overflow-x: auto;
+          white-space: nowrap;
 
           @media(max-width: 320px) {
             padding-left: 10px;
@@ -678,7 +706,6 @@ export default class Employees2 extends Vue {
     }
   }
 }
-
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;

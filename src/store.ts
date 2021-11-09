@@ -10,7 +10,9 @@ export interface EmployeeType {
 
 export interface State {
   employees: EmployeeType[],
-  isSidebarShowed: boolean
+  isSidebarShowed: boolean,
+  isEdit: boolean,
+  editProduct: EmployeeType | undefined
 }
 
 export default createStore<State>({
@@ -237,7 +239,9 @@ export default createStore<State>({
         age: 50
       },
     ],
-    isSidebarShowed: false
+    isSidebarShowed: false,
+    isEdit: false,
+    editProduct: undefined
   },
   mutations: {
     addEmployee(state, employee: EmployeeType) {
@@ -246,8 +250,20 @@ export default createStore<State>({
     deleteEmployee(state, index: number) {
       state.employees.splice(index, 1)
     },
+    updateEmployee(state, employee: EmployeeType) {
+      const index = state.employees.findIndex(e => e.id === employee.id)
+      state.employees[index].age = employee.age
+      state.employees[index].name = employee.name
+      state.employees[index].position = employee.position
+    },
     toggleIsSidebarShowed(state) {
       state.isSidebarShowed = !state.isSidebarShowed
+    },
+    toggleIsEdit(state) {
+      state.isEdit = !state.isEdit
+    },
+    updateEditProduct(state, employee: EmployeeType) {
+      state.editProduct = employee
     }
   },
   actions: {
@@ -259,6 +275,12 @@ export default createStore<State>({
     },
     isSidebarShowed(state): boolean {
       return state.isSidebarShowed
+    },
+    isEdit(state): boolean {
+      return state.isEdit
+    },
+    editProduct(state): EmployeeType {
+      return state.editProduct
     }
   }
 })

@@ -32,7 +32,7 @@
                 employee.position === 'admin' ? 'Администратор' : 'Гость'
               }}</span>
             <span class="col-ceil col-name-age">{{ employee.age }}</span>
-            <button class="col-ceil-square" style="margin-right: 1px;">
+            <button class="col-ceil-square" style="margin-right: 1px;" @click="() => {isModalSowed = true; editProduct = {...employee}; isEdit = true}">
               <img src="~@assets/icons/edit.svg" alt="edit">
             </button>
             <button class="col-ceil-square"
@@ -93,11 +93,11 @@
           </div>
           <div class="table-small-row">
             <span class="small-col-name">ФИО</span>
-            <span class="small-ceil">{{ employee.name }}</span>
+            <p class="small-ceil">{{ employee.name }}</p>
           </div>
           <div class="table-small-row">
             <span class="small-col-name">Должность</span>
-            <span class="small-ceil">{{ employee.position }}</span>
+            <span class="small-ceil">{{ employee.position === 'admin' ? 'Администратор' : 'Гость' }}</span>
           </div>
           <div class="table-small-row">
             <span class="small-col-name">Возраст</span>
@@ -105,7 +105,7 @@
           </div>
           <div class="table-small-row">
             <button class="small-table-edit-btn">
-              <img src="~@assets/icons/edit.svg" alt="edit">
+              <img src="~@assets/icons/edit.svg" alt="edit" @click="() => {isModalSowed = true; editProduct = {...employee}; isEdit = true}">
             </button>
             <button class="small-table-delete-btn" @click="deleteEmployee(index)">
               <img src="~@assets/icons/trash.svg" alt="trash">
@@ -149,7 +149,8 @@
   <div class="modal" :style="{display: isModalSowed ? 'block' : 'none'}">
     <div class="modal-container">
       <div class="modal-info">
-        <span class="title">Добавление пользователя</span>
+        <span class="title" v-if="!isEdit">Добавление сотрудника</span>
+        <span class="title" v-if="isEdit">Редактировние сотрудника</span>
         <button class="close" @click="this.isModalSowed = false">
           <img src="~@assets/icons/close.svg" alt="close">
         </button>
@@ -157,11 +158,19 @@
       <div class="modal-content">
         <div class="modal-input-container modal-initials">
           <span class="modal-label">ФИО</span>
-          <input type="text" class="modal-input" v-model="name"/>
+          <input type="text" class="modal-input" v-if="!isEdit" v-model="name"/>
+          <input type="text" class="modal-input" v-if="isEdit" v-model="editProduct.name"/>
         </div>
         <div class="modal-input-container modal-position">
           <span class="modal-label">Должность</span>
-          <el-select v-model="selectValue" placeholder="Select" filterable>
+          <el-select v-model="selectValue" placeholder="Select" filterable v-if="!isEdit">
+            <el-option v-for="option in selectOptions"
+                       :key="option.value"
+                       :label="option.label"
+                       :value="option.value"
+            ></el-option>
+          </el-select>
+          <el-select v-model="editProduct.position" placeholder="Select" filterable v-if="isEdit">
             <el-option v-for="option in selectOptions"
                        :key="option.value"
                        :label="option.label"
@@ -171,20 +180,38 @@
         </div>
         <div class="modal-input-container modal-age">
           <span class="modal-label">Возраст</span>
-          <input type="number" class="modal-input" v-model="age"/>
+          <input type="number" class="modal-input" v-model="age" v-if="!isEdit"/>
+          <input type="number" class="modal-input" v-model="editProduct.age" v-if="isEdit"/>
         </div>
         <div class="modal-actions">
           <button class="modal-btn modal-cancel" @click="this.isModalSowed = false">Отмена</button>
-          <button class="modal-btn modal-add" @click="createEmployee">Добавить</button>
+          <button class="modal-btn modal-add" v-if="!isEdit" @click="createEmployee">Добавить</button>
+          <button class="modal-btn modal-add" v-if="isEdit" @click="editEmployee">Сохранить</button>
         </div>
       </div>
     </div>
   </div>
+  <el-dialog
+      v-model="deleteDialog"
+      title="Удаление сотрдника"
+      width="30%"
+  >
+    <span>Вы действительно хотите удалить сотрудника ?</span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button type="success" @click="deleteDialog = false">Отмена</el-button>
+        <el-button type="danger" @click="()=>{deleteDialog = false; this.$store.commit('deleteEmployee', deleteIndex)}"
+        >Подвердить</el-button
+        >
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script lang="ts">
 import {Options, Vue, Watch} from 'vue-property-decorator'
 import {ElSelectV2} from 'element-plus'
+import {EmployeeType} from '@/store'
 
 @Options({
   name: 'employees',
@@ -206,9 +233,15 @@ export default class Employees extends Vue {
     {value: 'admin', label: 'Администратор'},
     {value: 'guest', label: 'Гость'}
   ]
+  isEdit: boolean = false
+  editProduct: EmployeeType
+  deleteDialog: boolean = false
+  deleteIndex: number
 
   @Watch('$store.getters.employees', {deep: true})
   onEmployeesChange() {
+    if(this.activePage * 12 - 1 > this.$store.getters.employees.length)
+      this.activePage--
     this.totalPages = Math.ceil(this.$store.getters.employees.length / 12)
     if (this.totalPages < this.showingPagesButtons[2]) {
       if (this.showingPagesButtons[2] === 3)
@@ -229,8 +262,15 @@ export default class Employees extends Vue {
 
   }
 
+  editEmployee() {
+    this.$store.commit('updateEmployee', this.editProduct)
+    this.isEdit = false
+    this.isModalSowed = false
+  }
+
   deleteEmployee(index: number) {
-    this.$store.commit('deleteEmployee', index)
+    this.deleteDialog = true
+    this.deleteIndex = index
   }
 
   created() {
@@ -246,6 +286,10 @@ export default class Employees extends Vue {
 
   selectPage(page: number) {
     this.activePage = page
+    if(page === this.showingPagesButtons[2])
+      this.nextPage()
+    if(page === this.showingPagesButtons[0])
+      this.prevPage()
   }
 
   nextPage() {
@@ -561,6 +605,9 @@ export default class Employees extends Vue {
           padding-left: 20px;
           display: flex;
           align-items: center;
+          padding-right: 10px;
+          overflow-x: auto;
+          white-space: nowrap;
 
           @media(max-width: 320px) {
             padding-left: 10px;
@@ -638,6 +685,30 @@ export default class Employees extends Vue {
     background: white;
     transition: all 0.3s linear;
 
+    @media(max-width: 1400px) and (min-width: 1000px) {
+      top: 200px;
+      left: 250px;
+    }
+
+    @media(max-width: 1000px) {
+      top: 120px;
+      left: 120px;
+    }
+
+    @media(max-width: 800px) {
+      top: 100px;
+      left: 100px;
+    }
+
+    @media(max-width: 600px) {
+      width: 450px;
+    }
+
+    @media (max-width: 320px) {
+      left: 20px;
+      width: 280px;
+    }
+
     .modal-info {
       width: 100%;
       height: 48px;
@@ -673,6 +744,14 @@ export default class Employees extends Vue {
         height: 56px;
         justify-content: space-between;
 
+        @media(max-width: 600px) {
+          width: 395px;
+        }
+
+        @media(max-width: 320px) {
+          width: 230px;
+        }
+
 
         .modal-input {
           border: 1px solid #CED4DE;
@@ -680,7 +759,7 @@ export default class Employees extends Vue {
           color: #162147;
           background: white;
           height: 35px;
-          width: 577px;
+          width: 100%;
           outline: none;
           font-size: 14px;
 
@@ -737,9 +816,6 @@ export default class Employees extends Vue {
       }
     }
   }
-}
-button {
-  cursor: pointer;
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

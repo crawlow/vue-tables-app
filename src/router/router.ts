@@ -2,15 +2,22 @@
 import {createRouter, createWebHistory, RouteRecordRaw} from 'vue-router'
 import LoginPage from '@/views/pages/login/login.vue'
 import ErrorPageComponent from '@views/pages/error404/error404.vue'
-//#region Admin
-const Layout = () => import('@/views/layouts/layout.vue')
-
 import ReferenceShopBooks from '@views/pages/reference-shop-books/reference-shop-books.vue'
 import Employees from '@views/pages/employees/employees.vue'
 import Points from '@views/pages/points/points.vue'
-import {LOGIN, DEFAULT, EMPLOYEES, REFERENCESHOPBOOKS, POINTS, EMPLOYEES2, CREATEEMPLOYEE} from './routerNames'
+import {
+  DEFAULT,
+  EDITORCREATEEMPLOYEE,
+  EMPLOYEES,
+  EMPLOYEES2,
+  LOGIN,
+  POINTS,
+  REFERENCESHOPBOOKS
+} from './routerNames'
 import Employees2 from '@views/pages/employees/employees2.vue'
-import CreateEmployee from '@views/pages/employees/create-employee.vue'
+import EditOrCreateEmployee from '@views/pages/employees/edit-or-create-employee.vue'
+//#region Admin
+const Layout = () => import('@/views/layouts/layout.vue')
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -63,9 +70,9 @@ const routes: Array<RouteRecordRaw> = [
         meta: {title: 'Сотрудники2'}
       },
       {
-        path: 'create-employee',
-        name: CREATEEMPLOYEE,
-        component: CreateEmployee,
+        path: 'edit-or-create-employee',
+        name: EDITORCREATEEMPLOYEE,
+        component: EditOrCreateEmployee,
       }
     ],
   },
