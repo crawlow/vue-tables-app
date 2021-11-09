@@ -196,7 +196,7 @@
       title="Удаление сотрдника"
       width="30%"
   >
-    <span>Вы действительно хотите удалить сотрудника ?</span>
+    <span>Вы действительно хотите удалить сотрудника "{{ deleteName }}" ?</span>
     <template #footer>
       <span class="dialog-footer">
         <el-button type="success" @click="deleteDialog = false">Отмена</el-button>
@@ -237,6 +237,7 @@ export default class Employees extends Vue {
   editProduct: EmployeeType
   deleteDialog: boolean = false
   deleteIndex: number
+  deleteName: string
 
   @Watch('$store.getters.employees', {deep: true})
   onEmployeesChange() {
@@ -271,6 +272,7 @@ export default class Employees extends Vue {
   deleteEmployee(index: number) {
     this.deleteDialog = true
     this.deleteIndex = index
+    this.deleteName = this.$store.getters.employees[index].name
   }
 
   created() {

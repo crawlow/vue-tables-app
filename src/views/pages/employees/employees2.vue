@@ -151,7 +151,7 @@
       title="Удаление сотрдника"
       width="30%"
   >
-    <span>Вы действительно хотите удалить сотрудника ?</span>
+    <span>Вы действительно хотите удалить сотрудника "{{ deleteName }}" ?</span>
     <template #footer>
       <span class="dialog-footer">
         <el-button type="success" @click="deleteDialog = false">Отмена</el-button>
@@ -182,6 +182,7 @@ export default class Employees2 extends Vue {
   activePage: number = 1
   deleteDialog: boolean = false
   deleteIndex: number
+  deleteName: string
 
   beforeMount() {
     this.totalPages = Math.ceil(this.$store.getters.employees.length / 12)
@@ -219,6 +220,7 @@ export default class Employees2 extends Vue {
   deleteEmployee(index: number) {
     this.deleteDialog = true
     this.deleteIndex = index
+    this.deleteName = this.$store.getters.employees[index].name
   }
   selectPage(page: number) {
     this.activePage = page
