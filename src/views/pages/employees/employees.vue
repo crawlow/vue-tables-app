@@ -2,7 +2,7 @@
   <div class="container">
     <div class="info">
       <span class="title">Сотрудники</span>
-      <button class="btn" @click="this.isModalSowed = true">Добавить сотрудника</button>
+      <button class="btn" @click="this.isModalShowed = true">Добавить сотрудника</button>
     </div>
     <div class="table-container-big">
       <div class="search">
@@ -32,7 +32,7 @@
                 employee.position === 'admin' ? 'Администратор' : 'Гость'
               }}</span>
             <span class="col-ceil col-name-age">{{ employee.age }}</span>
-            <button class="col-ceil-square" style="margin-right: 1px;" @click="() => {isModalSowed = true; editProduct = {...employee}; isEdit = true}">
+            <button class="col-ceil-square" style="margin-right: 1px;" @click="() => {isModalShowed = true; editProduct = {...employee}; isEdit = true}">
               <img src="~@assets/icons/edit.svg" alt="edit">
             </button>
             <button class="col-ceil-square"
@@ -43,37 +43,9 @@
           </div>
         </div>
       </div>
-      <div class="pagination">
-        <button class="btn arrow" :disabled="!hasPrev" @click="prevPage">
-          <img src="~@assets/icons/arrow-left.svg" alt="arrow-left">
-        </button>
-        <button
-            class="btn"
-            :class="{'active-btn' : showingPagesButtons[0] === activePage}"
-            @click="selectPage(showingPagesButtons[0])"
-        >
-          {{ showingPagesButtons[0] }}
-        </button>
-        <button
-            class="btn"
-            :class="{'active-btn' : showingPagesButtons[1] === activePage}"
-            v-if="showingPagesButtons[1]"
-            @click="selectPage(showingPagesButtons[1])"
-        >
-          {{ showingPagesButtons[1] }}
-        </button>
-        <button
-            class="btn"
-            :class="{'active-btn' : showingPagesButtons[2] === activePage}"
-            v-if="showingPagesButtons[2]"
-            @click="selectPage(showingPagesButtons[2])"
-        >
-          {{ showingPagesButtons[2] }}
-        </button>
-        <button class="btn arrow" :disabled="!hasNext" @click="nextPage">
-          <img src="~@assets/icons/arrow-right.svg" alt="arrow-right">
-        </button>
-      </div>
+      <pagination
+          v-model:active-page="activePage"
+      ></pagination>
     </div>
     <div class="table-container-small">
       <div class="search-small">
@@ -104,7 +76,7 @@
             <span class="small-ceil">{{ employee.age }}</span>
           </div>
           <div class="table-small-row">
-            <button class="small-table-edit-btn" @click="() => {isModalSowed = true; editProduct = {...employee}; isEdit = true}">
+            <button class="small-table-edit-btn" @click="() => {isModalShowed = true; editProduct = {...employee}; isEdit = true}">
               <img src="~@assets/icons/edit.svg" alt="edit">
             </button>
             <button class="small-table-delete-btn" @click="deleteEmployee(index)">
@@ -113,45 +85,19 @@
           </div>
         </div>
       </div>
-      <div class="pagination" style="display:flex;justify-content:center;">
-        <button class="btn arrow" :disabled="!hasPrev" @click="prevPage">
-          <img src="~@assets/icons/arrow-left.svg" alt="arrow-left">
-        </button>
-        <button
-            class="btn"
-            :class="{'active-btn' : showingPagesButtons[0] === activePage}"
-            @click="selectPage(showingPagesButtons[0])"
-        >
-          {{ showingPagesButtons[0] }}
-        </button>
-        <button
-            class="btn"
-            :class="{'active-btn' : showingPagesButtons[1] === activePage}"
-            v-if="showingPagesButtons[1]"
-            @click="selectPage(showingPagesButtons[1])"
-        >
-          {{ showingPagesButtons[1] }}
-        </button>
-        <button
-            class="btn"
-            :class="{'active-btn' : showingPagesButtons[2] === activePage}"
-            v-if="showingPagesButtons[2]"
-            @click="selectPage(showingPagesButtons[2])"
-        >
-          {{ showingPagesButtons[2] }}
-        </button>
-        <button class="btn arrow" :disabled="!hasNext" @click="nextPage">
-          <img src="~@assets/icons/arrow-right.svg" alt="arrow-right">
-        </button>
+      <div  style="display:flex;justify-content:center;">
+        <pagination
+            v-model:active-page="activePage"
+        ></pagination>
       </div>
     </div>
   </div>
-  <div class="modal" :style="{display: isModalSowed ? 'block' : 'none'}">
+  <div class="modal" :class="{'hide' : !isModalShowed, 'show': isModalShowed}">
     <div class="modal-container">
       <div class="modal-info">
         <span class="title" v-if="!isEdit">Добавление сотрудника</span>
         <span class="title" v-if="isEdit">Редактировние сотрудника</span>
-        <button class="close" @click="this.isModalSowed = false">
+        <button class="close" @click="this.isModalShowed = false">
           <img src="~@assets/icons/close.svg" alt="close">
         </button>
       </div>
@@ -184,7 +130,7 @@
           <input type="number" class="modal-input" v-model="editProduct.age" v-if="isEdit"/>
         </div>
         <div class="modal-actions">
-          <button class="modal-btn modal-cancel" @click="this.isModalSowed = false">Отмена</button>
+          <button class="modal-btn modal-cancel" @click="this.isModalShowed = false">Отмена</button>
           <button class="modal-btn modal-add" v-if="!isEdit" @click="createEmployee">Добавить</button>
           <button class="modal-btn modal-add" v-if="isEdit" @click="editEmployee">Сохранить</button>
         </div>
@@ -210,23 +156,21 @@
 </template>
 
 <script lang="ts">
-import {Options, Vue, Watch} from 'vue-property-decorator'
+import {Options, Vue} from 'vue-property-decorator'
 import {ElSelectV2} from 'element-plus'
 import {EmployeeType} from '@/store'
+import Pagination from '@views/components/pagination.vue'
 
 @Options({
   name: 'employees',
   components: {
+    Pagination,
     ElSelectV2
   }
 })
 export default class Employees extends Vue {
-  totalPages: number = 1
-  showingPagesButtons: number[] = []
-  hasNext: boolean = false
-  hasPrev: boolean = false
   activePage: number = 1
-  isModalSowed: boolean = false
+  isModalShowed: boolean = false
   selectValue: 'admin' | 'guest' = 'admin'
   name: string = ''
   age: number = 0
@@ -240,79 +184,16 @@ export default class Employees extends Vue {
   deleteIndex: number
   deleteName: string
 
-  @Watch('$store.getters.employees', {deep: true})
-  onEmployeesChange() {
-    if(this.activePage * 12 - 1 > this.$store.getters.employees.length)
-      this.activePage--
-    this.totalPages = Math.ceil(this.$store.getters.employees.length / 12)
-    if (this.totalPages < this.showingPagesButtons[2]) {
-      if (this.showingPagesButtons[2] === 3)
-        this.showingPagesButtons[2] = undefined
-      if (this.showingPagesButtons[2] > 3) {
-        this.showingPagesButtons[2] = this.totalPages
-        this.showingPagesButtons[1] = this.showingPagesButtons[2] - 1
-        this.showingPagesButtons[0] = this.showingPagesButtons[1] - 1
-      }
-    }
-    if (this.totalPages < this.showingPagesButtons[1])
-      if (this.showingPagesButtons[1] === 2 && !this.showingPagesButtons[2])
-        this.showingPagesButtons[1] = undefined
-    if (this.totalPages > 3 && this.showingPagesButtons[2] + 1 <= this.totalPages)
-      this.hasNext = true
-    if (this.showingPagesButtons[0] - 1 > 0)
-      this.hasPrev = true
-
-  }
-
   editEmployee() {
     this.$store.commit('updateEmployee', this.editProduct)
     this.isEdit = false
-    this.isModalSowed = false
+    this.isModalShowed = false
   }
 
   deleteEmployee(index: number) {
     this.deleteDialog = true
     this.deleteIndex = index
     this.deleteName = this.$store.getters.employees[index].name
-  }
-
-  created() {
-    this.totalPages = Math.ceil(this.$store.getters.employees.length / 12)
-    for (let i = 1; i <= this.totalPages; i++) {
-      this.showingPagesButtons.push(i)
-      if (i === 3)
-        break
-    }
-    if (this.totalPages > 3)
-      this.hasNext = true
-  }
-
-  selectPage(page: number) {
-    this.activePage = page
-    if(page === this.showingPagesButtons[2])
-      this.nextPage()
-    if(page === this.showingPagesButtons[0])
-      this.prevPage()
-  }
-
-  nextPage() {
-    if (this.showingPagesButtons[2] + 1 <= this.totalPages) {
-      this.showingPagesButtons[0] = this.showingPagesButtons[1]
-      this.showingPagesButtons[1] = this.showingPagesButtons[2]
-      this.showingPagesButtons[2] = this.showingPagesButtons[2] + 1
-      this.hasPrev = true
-      this.hasNext = this.showingPagesButtons[2] + 1 <= this.totalPages
-    }
-  }
-
-  prevPage() {
-    if (this.showingPagesButtons[0] - 1 > 0) {
-      this.showingPagesButtons[0] = this.showingPagesButtons[0] - 1
-      this.showingPagesButtons[1] = this.showingPagesButtons[1] - 1
-      this.showingPagesButtons[2] = this.showingPagesButtons[2] - 1
-      this.hasNext = true
-      this.hasPrev = this.showingPagesButtons[0] - 1 > 0
-    }
   }
 
   createEmployee() {
@@ -325,12 +206,18 @@ export default class Employees extends Vue {
     this.selectValue = 'admin'
     this.name = ''
     this.age = 0
-    this.isModalSowed = false
+    this.isModalShowed = false
   }
 }
 </script>
 
 <style scoped lang="less">
+.show {
+  display: block;
+}
+.hide {
+  display: none;
+}
 .container {
   display: flex;
   flex-direction: column;

@@ -43,37 +43,9 @@
           </div>
         </div>
       </div>
-      <div class="pagination">
-        <button class="btn arrow" :disabled="!hasPrev" @click="prevPage">
-          <img src="~@assets/icons/arrow-left.svg" alt="arrow-left">
-        </button>
-        <button
-            class="btn"
-            :class="{'active-btn' : showingPagesButtons[0] === activePage}"
-            @click="selectPage(showingPagesButtons[0])"
-        >
-          {{ showingPagesButtons[0] }}
-        </button>
-        <button
-            class="btn"
-            :class="{'active-btn' : showingPagesButtons[1] === activePage}"
-            v-if="showingPagesButtons[1]"
-            @click="selectPage(showingPagesButtons[1])"
-        >
-          {{ showingPagesButtons[1] }}
-        </button>
-        <button
-            class="btn"
-            :class="{'active-btn' : showingPagesButtons[2] === activePage}"
-            v-if="showingPagesButtons[2]"
-            @click="selectPage(showingPagesButtons[2])"
-        >
-          {{ showingPagesButtons[2] }}
-        </button>
-        <button class="btn arrow" :disabled="!hasNext" @click="nextPage">
-          <img src="~@assets/icons/arrow-right.svg" alt="arrow-right">
-        </button>
-      </div>
+      <pagination
+          v-model:active-page="activePage"
+      ></pagination>
     </div>
     <div class="table-container-small">
       <div class="search-small">
@@ -113,36 +85,10 @@
           </div>
         </div>
       </div>
-      <div class="pagination" style="display:flex;justify-content:center;">
-        <button class="btn arrow" :disabled="!hasPrev" @click="prevPage">
-          <img src="~@assets/icons/arrow-left.svg" alt="arrow-left">
-        </button>
-        <button
-            class="btn"
-            :class="{'active-btn' : showingPagesButtons[0] === activePage}"
-            @click="selectPage(showingPagesButtons[0])"
-        >
-          {{ showingPagesButtons[0] }}
-        </button>
-        <button
-            class="btn"
-            :class="{'active-btn' : showingPagesButtons[1] === activePage}"
-            v-if="showingPagesButtons[1]"
-            @click="selectPage(showingPagesButtons[1])"
-        >
-          {{ showingPagesButtons[1] }}
-        </button>
-        <button
-            class="btn"
-            :class="{'active-btn' : showingPagesButtons[2] === activePage}"
-            v-if="showingPagesButtons[2]"
-            @click="selectPage(showingPagesButtons[2])"
-        >
-          {{ showingPagesButtons[2] }}
-        </button>
-        <button class="btn arrow" :disabled="!hasNext" @click="nextPage">
-          <img src="~@assets/icons/arrow-right.svg" alt="arrow-right">
-        </button>
+      <div  style="display:flex;justify-content:center;">
+        <pagination
+            v-model:active-page="activePage"
+        ></pagination>
       </div>
     </div>
   </div>
@@ -166,86 +112,26 @@
 <script lang="ts">
 import {Options, Vue, Watch} from 'vue-property-decorator'
 import {ElSelectV2} from 'element-plus'
+import Pagination from '@views/components/pagination.vue'
 
 
 @Options({
   name: 'employees2',
   components: {
-    ElSelectV2
+    ElSelectV2,
+    Pagination
   }
 })
 export default class Employees2 extends Vue {
-  totalPages: number = 1
-  showingPagesButtons: number[] = []
-  hasNext: boolean = false
-  hasPrev: boolean = false
   activePage: number = 1
   deleteDialog: boolean = false
   deleteIndex: number
   deleteName: string
 
-  beforeMount() {
-    this.totalPages = Math.ceil(this.$store.getters.employees.length / 12)
-    for (let i = 1; i <= this.totalPages; i++) {
-      this.showingPagesButtons.push(i)
-      if (i === 3)
-        break
-    }
-    if (this.totalPages > 3)
-      this.hasNext = true
-  }
-  @Watch('$store.getters.employees', {deep: true})
-  onEmployeesChange() {
-    if(this.activePage * 12 - 1 > this.$store.getters.employees.length)
-      this.activePage--
-    this.totalPages = Math.ceil(this.$store.getters.employees.length / 12)
-    if(this.totalPages < this.showingPagesButtons[2]) {
-      if(this.showingPagesButtons[2] === 3)
-        this.showingPagesButtons[2] = undefined
-      if(this.showingPagesButtons[2] > 3) {
-        this.showingPagesButtons[2] = this.totalPages
-        this.showingPagesButtons[1] = this.showingPagesButtons[2] - 1
-        this.showingPagesButtons[0] = this.showingPagesButtons[1] - 1
-      }
-    }
-    if(this.totalPages < this.showingPagesButtons[1])
-      if(this.showingPagesButtons[1] === 2 && !this.showingPagesButtons[2])
-        this.showingPagesButtons[1] = undefined
-    if (this.totalPages > 3 && this.showingPagesButtons[2] + 1 <= this.totalPages)
-      this.hasNext = true
-    if(this.showingPagesButtons[0] - 1 > 0)
-      this.hasPrev = true
-
-  }
   deleteEmployee(index: number) {
     this.deleteDialog = true
     this.deleteIndex = index
     this.deleteName = this.$store.getters.employees[index].name
-  }
-  selectPage(page: number) {
-    this.activePage = page
-    if(page === this.showingPagesButtons[2])
-      this.nextPage()
-    if(page === this.showingPagesButtons[0])
-      this.prevPage()
-  }
-  nextPage() {
-    if (this.showingPagesButtons[2] + 1 <= this.totalPages) {
-      this.showingPagesButtons[0] = this.showingPagesButtons[1]
-      this.showingPagesButtons[1] = this.showingPagesButtons[2]
-      this.showingPagesButtons[2] = this.showingPagesButtons[2] + 1
-      this.hasPrev = true
-      this.hasNext = this.showingPagesButtons[2] + 1 <= this.totalPages
-    }
-  }
-  prevPage() {
-    if (this.showingPagesButtons[0] - 1 > 0) {
-      this.showingPagesButtons[0] = this.showingPagesButtons[0] - 1
-      this.showingPagesButtons[1] = this.showingPagesButtons[1] - 1
-      this.showingPagesButtons[2] = this.showingPagesButtons[2] - 1
-      this.hasNext = true
-      this.hasPrev = this.showingPagesButtons[0] - 1 > 0
-    }
   }
 }
 </script>
@@ -584,38 +470,6 @@ export default class Employees2 extends Vue {
     }
   }
 
-  .pagination {
-    height: 26px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-
-    .btn {
-      background: #F0F4F7;
-      border: none;
-      margin-left: 2px;
-      width: 26px;
-      height: 100%;
-      color: #1B283F;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 14px;
-      outline: none;
-
-      &:disabled img {
-        filter: invert(49%) sepia(0%) saturate(25%) hue-rotate(161deg) brightness(90%) contrast(99%);
-      }
-
-      .arrow {
-        width: 23px;
-      }
-    }
-
-    .active-btn {
-      color: #4F5C9C;
-    }
-  }
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
