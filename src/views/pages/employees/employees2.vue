@@ -148,8 +148,8 @@
   </div>
   <el-dialog
       v-model="deleteDialog"
-      title="Удаление сотрдника"
-      width="30%"
+      title="Удаление сотрудника"
+      width="75%"
   >
     <span>Вы действительно хотите удалить сотрудника "{{ deleteName }}" ?</span>
     <template #footer>
@@ -271,6 +271,22 @@ export default class Employees2 extends Vue {
     width: 490px;
   }
 
+  @media(max-width: 600px) {
+    width: 450px;
+  }
+
+  @media(max-width: 550px) {
+    width: 400px;
+  }
+
+  @media(max-width: 500px) {
+    width: 350px;
+  }
+
+  @media(max-width: 400px) {
+    width: 280px;
+  }
+
   @media(max-width: 320px) {
     width: 270px;
   }
@@ -287,6 +303,10 @@ export default class Employees2 extends Vue {
       font-size: 18px;
       color: #262838;
       margin-left: 25px;
+
+      @media(max-width: 400px) {
+        margin-left: 12px;
+      }
       @media(max-width: 320px) {
         margin-left: 10px;
       }
@@ -301,6 +321,13 @@ export default class Employees2 extends Vue {
       font-size: 14px;
       border: none;
       outline: none;
+      @media(max-width: 500px) {
+        width: 120px;
+      }
+      @media(max-width: 400px) {
+        margin-right: 12px;
+        width: 110px;
+      }
       @media(max-width: 320px) {
         margin-right: 10px;
         width: 100px;
@@ -458,11 +485,7 @@ export default class Employees2 extends Vue {
         border: 1px solid #CED4DE;
         padding: 9px 0 8px 20px;
         height: 35px;
-        width: 386px;
-
-        @media(max-width: 320px) {
-          width: 170px;
-        }
+        width: 90%;
 
         &::placeholder {
           color: #BEBFC3;
@@ -536,6 +559,9 @@ export default class Employees2 extends Vue {
           @media(max-width: 320px) {
             padding-left: 10px;
           }
+          @media(max-width: 400px) {
+            padding-left: 11px;
+          }
         }
 
         .small-col-name {
@@ -549,6 +575,9 @@ export default class Employees2 extends Vue {
           align-items: center;
           @media(max-width: 320px) {
             padding-left: 10px;
+          }
+          @media(max-width: 400px) {
+            padding-left: 11px;
           }
         }
       }
@@ -585,126 +614,6 @@ export default class Employees2 extends Vue {
 
     .active-btn {
       color: #4F5C9C;
-    }
-  }
-}
-
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  background: rgba(0, 0, 0, 0.64);
-  width: 100%;
-  height: 100vh;
-  z-index: 98;
-
-  .container {
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 263px;
-    left: 447px;
-    width: 627px;
-    height: 350px;
-    background: white;
-    transition: all 0.3s linear;
-
-    .info {
-      width: 100%;
-      height: 48px;
-      background: #D6D6FA;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-
-      .title {
-        font-size: 17px;
-        color: #162147;
-        font-weight: 600;
-        margin-left: 26px;
-      }
-
-      .close {
-        margin-right: 24px;
-        display: flex;
-        flex-direction: column;
-        border: none;
-        outline: none;
-        background: transparent;
-      }
-    }
-
-    .content {
-      padding: 23px 24px 24px 26px;
-
-      .input-container {
-        display: flex;
-        flex-direction: column;
-        width: 577px;
-        height: 56px;
-        justify-content: space-between;
-
-        .initials {
-          margin-bottom: 14px;
-        }
-
-        .position {
-          margin-bottom: 13px;
-        }
-
-        .age {
-          margin-bottom: 24px;
-        }
-
-        .input {
-          border: 1px solid #CED4DE;
-          padding: 9px 0 9px 15px;
-          color: #162147;
-          background: white;
-          height: 35px;
-          width: 577px;
-          outline: none;
-          font-size: 14px;
-
-          &:focus {
-            border: 1px solid #4F5C9C;
-            color: #070054;
-          }
-        }
-
-        .label {
-          color: #586174;
-          font-size: 13px;
-        }
-      }
-
-      .actions {
-        display: flex;
-        justify-content: flex-end;
-
-        .btn {
-          font-size: 14px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          border: none;
-          outline: none;
-          height: 36px;
-
-          .cancel {
-            margin-right: 6px;
-            color: #FF0000;
-            background: #FFD3D3;
-            width: 104px;
-          }
-
-          .add {
-            background: #FF0000;
-            color: white;
-            width: 117px;
-          }
-        }
-      }
     }
   }
 }

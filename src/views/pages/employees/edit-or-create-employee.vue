@@ -95,8 +95,29 @@ export default class EditOrCreateEmployee extends Vue {
   background: white;
   transition: all 0.3s linear;
 
+
   @media(max-width: 800px) {
     width: 485px;
+  }
+
+  @media(max-width: 600px) {
+    width: 440px;
+  }
+
+  @media(max-width: 550px) {
+    width: 400px;
+  }
+
+  @media(max-width: 500px) {
+    width: 400px;
+  }
+
+  @media(max-width: 450px) {
+    width: 350px;
+  }
+
+  @media(max-width: 400px) {
+    width: 270px;
   }
 
   @media(max-width: 320px) {

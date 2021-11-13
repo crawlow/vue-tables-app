@@ -58,7 +58,7 @@ export default class LayoutSidebar extends Vue {
     width: 58px;
   }
 
-  @media(max-width: 320px) {
+  @media(max-width: 500px) {
     display: none;
   }
 
