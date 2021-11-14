@@ -54,7 +54,7 @@ import {EmployeeType} from '@/store'
 export default class EditOrCreateEmployee extends Vue {
   selectValue: 'admin' | 'guest' = 'admin'
   name: string = ''
-  age: number = 0
+  age: number | string = ''
   selectOptions = [
     {value: 'admin', label: 'Администратор'},
     {value: 'guest', label: 'Гость'}

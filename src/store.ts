@@ -276,7 +276,7 @@ export default createStore<State>({
     isSidebarShowed(state): boolean {
       return state.isSidebarShowed
     },
-    isEdit(state): boolean {
+    isEdit(state) {
       return state.isEdit
     },
     editProduct(state): EmployeeType {

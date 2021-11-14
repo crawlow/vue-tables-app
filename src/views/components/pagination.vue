@@ -33,26 +33,24 @@
 </template>
 
 <script lang="ts">
-import {Emit, Model, Options, Prop, Vue, Watch} from 'vue-property-decorator'
+import {Emit, Options, Prop, Vue, Watch} from 'vue-property-decorator'
 
 @Options({
   name: 'pagination',
 })
 export default class Pagination extends Vue {
   @Prop({type: Number}) activePage!: number
-  @Emit("update:activePage") changePage(page: number) {
-    return page;
-  }
+  @Prop() changePage!: (page:number) => number
   totalPages: number = 1
   showingPagesButtons: number[] = []
   hasNext: boolean = false
   hasPrev: boolean = false
 
-  @Watch('$store.getters.employees.length')
+  @Watch('$store.state.employees.length')
   onEmployeesChange() {
-    if(this.activePage * 12 - 1 > this.$store.getters.employees.length)
+    if((this.activePage - 1) * 12 + 1 > this.$store.state.employees.length && this.changePage)
       this.changePage(this.activePage - 1)
-    this.totalPages = Math.ceil(this.$store.getters.employees.length / 12)
+    this.totalPages = Math.ceil(this.$store.state.employees.length / 12)
     if (this.totalPages < this.showingPagesButtons[2]) {
       if (this.showingPagesButtons[2] === 3)
         this.showingPagesButtons[2] = undefined
@@ -72,7 +70,7 @@ export default class Pagination extends Vue {
   }
 
   created() {
-    this.totalPages = Math.ceil(this.$store.getters.employees.length / 12)
+    this.totalPages = Math.ceil(this.$store.state.employees.length / 12)
     for (let i = 1; i <= this.totalPages; i++) {
       this.showingPagesButtons.push(i)
       if (i === 3)
