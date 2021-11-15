@@ -1,5 +1,10 @@
 # medications
 
+## Github pages link
+```
+https://andrey779evseev.github.io/vue-tables-app/employees
+```
+
 ## Project setup
 ```
 npm install
