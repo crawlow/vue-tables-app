@@ -1,5 +1,9 @@
 # medications
 
+
+## Github pages link
+<span>**https://andrey779evseev.github.io/vue-tables-app/employees**</span>
+
 ## Project setup
 ```
 npm install
@@ -7,7 +11,7 @@ npm install
 
 ### Compiles and hot-reloads for development
 ```
-npm run serve
+npm run serve gggggggg
 ```
 
 ### Compiles and minifies for production

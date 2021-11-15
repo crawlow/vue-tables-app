@@ -14,6 +14,9 @@ if (isProduction) {
         }));
 }
 module.exports = {
+    publicPath: process.env.NODE_ENV === 'production'
+        ? '/vue-tables-app/'
+        : '/',
     assetsDir: "assets/",
     configureWebpack: {
         resolve: {
