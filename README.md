@@ -1,8 +1,7 @@
 # medications
 
 ## Github pages link
-
-<span style="color:red">**https://andrey779evseev.github.io/vue-tables-app/employees** text</span>
+**https://andrey779evseev.github.io/vue-tables-app/employees**{: style="color: red;" }
 
 
 ## Project setup
