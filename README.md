@@ -1,7 +1,5 @@
 # medications
 
-<<<<<<< HEAD
-
 ## Github pages link
 
 <span>**https://andrey779evseev.github.io/vue-tables-app/employees**</span>
