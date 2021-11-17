@@ -75,7 +75,7 @@
           <input v-if="!(photo && !isEdit || isEdit && getSrc(cardForEdit.photo))" class="modal-input" type="file" placeholder="Загрузите фото" :value="photoInput"
                  v-on:change="(e) => {photoInput = e.target.value; saveImage(e.target.files[0])}">
           <div v-if="photo && !isEdit || isEdit && getSrc(cardForEdit.photo)" class="photo-container">
-            <img v-if="isEdit" :src="getSrc(cardForEdit.photo)" alt="" height="50" width="50" @click="dialogVisible = true; dialogImageUrl = cardForEdit.photo">
+            <img v-if="isEdit" :src="getSrc(cardForEdit.photo)" alt="" height="50" width="50" @click="dialogVisible = true; dialogImageUrl = getSrc(cardForEdit.photo)">
             <img v-if="!isEdit" :src="photo" alt="" height="50" width="50" @click="dialogVisible = true; dialogImageUrl = photo">
             <el-icon @click="removeImage" class="btn" :size="25" color="#162147">
               <delete-filled/>
