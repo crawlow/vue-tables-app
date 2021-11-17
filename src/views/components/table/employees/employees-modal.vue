@@ -4,7 +4,7 @@
       <div class="modal-info">
         <span class="title" v-if="!isEdit">Добавление сотрудника</span>
         <span class="title" v-if="isEdit">Редактировние сотрудника</span>
-        <button class="close" @click="changeIsModalShowed(false)">
+        <button class="close" @click="changeIsModalShowed(false); changeIsEdit(false)">
           <img src="~@assets/icons/close.svg" alt="close">
         </button>
       </div>
@@ -37,7 +37,7 @@
           <input type="number" class="modal-input" v-model="employeeForEdit.age" v-if="isEdit"/>
         </div>
         <div class="modal-actions">
-          <button class="modal-btn modal-cancel" @click="changeIsModalShowed(false)">Отмена</button>
+          <button class="modal-btn modal-cancel" @click="changeIsModalShowed(false); changeIsEdit(false)">Отмена</button>
           <button class="modal-btn modal-add" v-if="!isEdit" @click="createEmployee">Добавить</button>
           <button class="modal-btn modal-add" v-if="isEdit" @click="editEmployee">Сохранить</button>
         </div>
@@ -51,9 +51,9 @@ import {Vue, Options, Prop, Emit} from 'vue-property-decorator'
 import {EmployeeType} from '@/store'
 
 @Options({
-  name: 'modal'
+  name: 'employees-modal'
 })
-export default class Modal extends Vue {
+export default class EmployeesModal extends Vue {
   @Prop() isModalShowed!: boolean
   @Emit('update:isModalShowed') changeIsModalShowed(value: boolean) {
     return value

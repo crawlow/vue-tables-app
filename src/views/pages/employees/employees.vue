@@ -2,30 +2,30 @@
   <div class="container">
     <div class="info">
       <span class="title">Сотрудники</span>
-      <button class="btn" @click="this.isModalShowed = true">Добавить сотрудника</button>
+      <button class="btn" @click="this.isModalShowed = true;">Добавить сотрудника</button>
     </div>
-    <big-table
+    <employees-big-table
         v-model:active-page="activePage"
         v-model:delete-employee="deleteEmployee"
         v-model:employee-for-edit="employeeForEdit"
         v-model:is-edit="isEdit"
         v-model:is-modal-showed="isModalShowed"
         :employee-page="1"
-    ></big-table>
-    <small-table
+    ></employees-big-table>
+    <employees-small-table
         v-model:active-page="activePage"
         v-model:delete-employee="deleteEmployee"
         v-model:employee-for-edit="employeeForEdit"
         v-model:is-edit="isEdit"
         v-model:is-modal-showed="isModalShowed"
         :employee-page="1"
-    ></small-table>
+    ></employees-small-table>
   </div>
-  <modal  v-if="isModalShowed"
+  <employees-modal  v-if="isModalShowed"
       v-model:is-modal-showed="isModalShowed"
       v-model:is-edit="isEdit"
       v-model:employee="employeeForEdit"
-  ></modal>
+  ></employees-modal>
   <el-dialog
       v-model="deleteDialog"
       title="Удаление сотрудника"
@@ -47,17 +47,16 @@
 import {Options, Vue} from 'vue-property-decorator'
 import {ElSelectV2} from 'element-plus'
 import {EmployeeType} from '@/store'
-import Pagination from '@views/components/pagination.vue'
-import BigTable from '@views/components/table/big-table/big-table.vue'
-import SmallTable from '@views/components/table/small-table/small-table.vue'
-import Modal from '@views/components/table/modal.vue'
+import EmployeesSmallTable from '@views/components/table/employees/small-table/employees-small-table.vue'
+import EmployeesBigTable from '@views/components/table/employees/big-table/employees-big-table.vue'
+import EmployeesModal from '@views/components/table/employees/employees-modal.vue'
 
 @Options({
   name: 'employees',
   components: {
-    Modal,
-    SmallTable,
-    BigTable,
+    EmployeesModal,
+    EmployeesSmallTable,
+    EmployeesBigTable,
     ElSelectV2
   }
 })

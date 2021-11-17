@@ -18,7 +18,7 @@
           v-for="(employee, index) in $store.state.employees"
           :key="employee.id"
       >
-        <big-table-item
+        <employees-big-table-item
             :employee="employee"
             v-model:delete-employee="deleteEmployee"
             v-model:active-page="activePage"
@@ -27,7 +27,7 @@
             v-model:change-is-modal-showed="changeIsModalShowed"
             :index="index"
             :employee-page="employeePage"
-        ></big-table-item>
+        ></employees-big-table-item>
       </div>
     </div>
     <pagination
@@ -41,14 +41,14 @@
 <script lang="ts">
 import {Vue, Options, Prop, Emit} from 'vue-property-decorator'
 import {EmployeeType} from '@/store'
-import BigTableItem from '@views/components/table/big-table/big-table-item.vue'
 import Pagination from '@views/components/pagination.vue'
+import EmployeesBigTableItem from '@views/components/table/employees/big-table/employees-big-table-item.vue'
 
 @Options({
-  name: 'big-table',
-  components: {BigTableItem, Pagination}
+  name: 'employees-big-table',
+  components: {EmployeesBigTableItem, Pagination}
 })
-export default class BigTable extends Vue {
+export default class EmployeesBigTable extends Vue {
   @Prop() employeePage!: number
   @Prop() activePage!: number
   @Emit('update:activePage') changeActivePage(page: number) {

@@ -38,9 +38,9 @@ import {Vue, Options, Prop} from 'vue-property-decorator'
 import {EmployeeType} from '@/store'
 
 @Options({
-  name: 'small-table-item'
+  name: 'employees-small-table-item'
 })
-export default class SmallTableItem extends Vue {
+export default class EmployeesSmallTableItem extends Vue {
   @Prop() employeePage!: number
   @Prop() index!: number
   @Prop() employee!: EmployeeType

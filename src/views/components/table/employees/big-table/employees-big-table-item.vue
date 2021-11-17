@@ -1,20 +1,20 @@
 <template>
   <div class="row"
        v-if="index > (activePage - 1)*12 - 1 && index < activePage*12 || activePage === 1 && index < 12">
-    <span class="col-ceil col-name-id">{{ employee.id }}</span>
-    <span class="col-ceil col-name-initials">{{ employee.name }}</span>
+    <span class="col-cell col-name-id">{{ employee.id }}</span>
+    <span class="col-cell col-name-initials">{{ employee.name }}</span>
     <span
-        class="col-ceil col-name-position">{{
+        class="col-cell col-name-position">{{
         employee.position === 'admin' ? 'Администратор' : 'Гость'
       }}</span>
-    <span class="col-ceil col-name-age">{{ employee.age }}</span>
-    <button v-if="employeePage === 1" class="col-ceil-square" style="margin-right: 1px;" @click="() => {changeEmployeeForEdit({...employee}); changeIsModalShowed(true); changeIsEdit(true);}">
+    <span class="col-cell col-name-age">{{ employee.age }}</span>
+    <button v-if="employeePage === 1" class="col-cell-square" style="margin-right: 1px;" @click="() => {changeEmployeeForEdit({...employee}); changeIsModalShowed(true); changeIsEdit(true);}">
       <img src="~@assets/icons/edit.svg" alt="edit">
     </button>
-    <button v-if="employeePage === 2" class="col-ceil-square" style="margin-right: 1px;" @click="()=>{this.$store.commit('toggleIsEdit'); this.$store.commit('updateEditProduct', employee);$router.push({name: 'edit-or-create-employee'})}">
+    <button v-if="employeePage === 2" class="col-cell-square" style="margin-right: 1px;" @click="()=>{this.$store.commit('toggleIsEdit'); this.$store.commit('updateEditProduct', employee);$router.push({name: 'edit-or-create-employee'})}">
       <img src="~@assets/icons/edit.svg" alt="edit">
     </button>
-    <button class="col-ceil-square"
+    <button class="col-cell-square"
             @click="deleteEmployee(index)"
     >
       <img src="~@assets/icons/trash.svg" alt="trash">
@@ -27,9 +27,9 @@ import {Vue, Options, Prop} from 'vue-property-decorator'
 import {EmployeeType} from '@/store'
 
 @Options({
-  name: 'big-table-item'
+  name: 'employees-big-table-item'
 })
-export default class BigTableItem extends Vue {
+export default class EmployeesBigTableItem extends Vue {
   @Prop() employeePage!: number
   @Prop() index!: number
   @Prop() employee!: EmployeeType
@@ -55,7 +55,7 @@ export default class BigTableItem extends Vue {
     height: 25px;
   }
 
-  .col-ceil {
+  .col-cell {
     background: #E6EAF6;
     margin-right: 1px;
     font-size: 14px;
@@ -86,7 +86,7 @@ export default class BigTableItem extends Vue {
     width: 229px;
   }
 
-  .col-ceil-square {
+  .col-cell-square {
     background: #E6EAF6;
     width: 37px;
     height: 100%;

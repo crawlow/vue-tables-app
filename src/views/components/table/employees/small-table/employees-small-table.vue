@@ -9,7 +9,7 @@
     <div class="table-small"
          v-for="(employee, index) in $store.state.employees" :key="employee.id"
     >
-      <small-table-item
+      <employees-small-table-item
           :employee="employee"
           v-model:delete-employee="deleteEmployee"
           v-model:active-page="activePage"
@@ -18,7 +18,7 @@
           v-model:change-is-modal-showed="changeIsModalShowed"
           :index="index"
           :employee-page="employeePage"
-      ></small-table-item>
+      ></employees-small-table-item>
     </div>
     <div style="display:flex;justify-content:center;">
       <pagination
@@ -33,14 +33,14 @@
 <script lang="ts">
 import {Vue, Options, Prop, Emit} from 'vue-property-decorator'
 import {EmployeeType} from '@/store'
-import SmallTableItem from '@views/components/table/small-table/small-table-item.vue'
 import Pagination from '@views/components/pagination.vue'
+import EmployeesSmallTableItem from '@views/components/table/employees/small-table/employees-small-table-item.vue'
 
 @Options({
   name: 'small-table',
-  components: {SmallTableItem, Pagination}
+  components: {EmployeesSmallTableItem, Pagination}
 })
-export default class SmallTable extends Vue {
+export default class EmployeesSmallTable extends Vue {
   @Prop() employeePage!: number
   @Prop() activePage!: number
   @Emit('update:activePage') changeActivePage(page: number) {

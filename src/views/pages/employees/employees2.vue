@@ -4,16 +4,16 @@
       <span class="title">Сотрудники</span>
       <button class="btn" @click="$router.push({name: 'edit-or-create-employee'})">Добавить сотрудника</button>
     </div>
-    <big-table
+    <employees-big-table
         v-model:active-page="activePage"
         v-model:delete-employee="deleteEmployee"
         :employee-page="2"
-    ></big-table>
-    <small-table
+    ></employees-big-table>
+    <employees-small-table
         v-model:active-page="activePage"
         v-model:delete-employee="deleteEmployee"
         :employee-page="2"
-    ></small-table>
+    ></employees-small-table>
   </div>
   <el-dialog
       v-model="deleteDialog"
@@ -35,17 +35,16 @@
 <script lang="ts">
 import {Options, Vue} from 'vue-property-decorator'
 import {ElSelectV2} from 'element-plus'
-import Pagination from '@views/components/pagination.vue'
-import SmallTable from '@views/components/table/small-table/small-table.vue'
-import BigTable from '@views/components/table/big-table/big-table.vue'
+import EmployeesSmallTable from '@views/components/table/employees/small-table/employees-small-table.vue'
+import EmployeesBigTable from '@views/components/table/employees/big-table/employees-big-table.vue'
 
 
 @Options({
   name: 'employees2',
   components: {
     ElSelectV2,
-    SmallTable,
-    BigTable
+    EmployeesSmallTable,
+    EmployeesBigTable
   }
 })
 export default class Employees2 extends Vue {
