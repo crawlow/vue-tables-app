@@ -44,7 +44,6 @@ import BigTable from '@views/components/table/big-table/big-table.vue'
   name: 'employees2',
   components: {
     ElSelectV2,
-    Pagination,
     SmallTable,
     BigTable
   }

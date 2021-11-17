@@ -58,7 +58,6 @@ import Modal from '@views/components/table/modal.vue'
     Modal,
     SmallTable,
     BigTable,
-    Pagination,
     ElSelectV2
   }
 })

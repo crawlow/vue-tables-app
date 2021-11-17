@@ -22,6 +22,7 @@
     </div>
     <div style="display:flex;justify-content:center;">
       <pagination
+          page-name="employees"
           v-model:active-page="activePage"
           v-model:changePage="changeActivePage"
       ></pagination>
@@ -33,10 +34,11 @@
 import {Vue, Options, Prop, Emit} from 'vue-property-decorator'
 import {EmployeeType} from '@/store'
 import SmallTableItem from '@views/components/table/small-table/small-table-item.vue'
+import Pagination from '@views/components/pagination.vue'
 
 @Options({
   name: 'small-table',
-  components: {SmallTableItem}
+  components: {SmallTableItem, Pagination}
 })
 export default class SmallTable extends Vue {
   @Prop() employeePage!: number

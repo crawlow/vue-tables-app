@@ -103,6 +103,9 @@ export default class Modal extends Vue {
   position: fixed;
   top: 0;
   left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: rgba(0, 0, 0, 0.64);
   width: 100%;
   height: 100vh;
@@ -111,58 +114,38 @@ export default class Modal extends Vue {
   .modal-container {
     display: flex;
     flex-direction: column;
-    position: fixed;
-    top: 263px;
-    left: 447px;
     width: 627px;
     height: 350px;
     background: white;
     transition: all 0.3s linear;
 
-    @media (max-width: 1400px) and (min-width: 1000px) {
-      top: 200px;
-      left: 250px;
-    }
-
-    @media (max-width: 1000px) {
-      top: 120px;
-      left: 120px;
-    }
 
     @media (max-width: 800px) {
-      top: 100px;
-      left: 100px;
       width: 550px;
     }
 
     @media (max-width: 700px) {
-      left: 70px;
       width: 500px;
     }
 
     @media (max-width: 600px) {
       width: 430px;
-      left: 50px;
     }
 
     @media (max-width: 550px) {
-      left: 50px;
       width: 400px;
     }
 
 
     @media (max-width: 500px) {
-      left: 7%;
       width: 350px;
     }
 
     @media (max-width: 400px) {
-      left: 5%;
       width: 285px;
     }
 
     @media (max-width: 320px) {
-      left: 20px;
       width: 280px;
     }
 

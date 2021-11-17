@@ -33,12 +33,13 @@
 </template>
 
 <script lang="ts">
-import {Emit, Options, Prop, Vue, Watch} from 'vue-property-decorator'
+import {Options, Prop, Vue, Watch} from 'vue-property-decorator'
 
 @Options({
   name: 'pagination',
 })
 export default class Pagination extends Vue {
+  @Prop() pageName!: 'employees' | 'cards'
   @Prop({type: Number}) activePage!: number
   @Prop() changePage!: (page:number) => number
   totalPages: number = 1
@@ -48,6 +49,8 @@ export default class Pagination extends Vue {
 
   @Watch('$store.state.employees.length')
   onEmployeesChange() {
+    if(this.pageName !== 'employees')
+      return
     if((this.activePage - 1) * 12 + 1 > this.$store.state.employees.length && this.changePage)
       this.changePage(this.activePage - 1)
     this.totalPages = Math.ceil(this.$store.state.employees.length / 12)
@@ -69,8 +72,36 @@ export default class Pagination extends Vue {
       this.hasPrev = true
   }
 
+  @Watch('$store.state.cards.length')
+  onCardsChange() {
+    if(this.pageName !== 'cards')
+      return
+    if((this.activePage - 1) * 12 + 1 > this.$store.state.cards.length && this.changePage)
+      this.changePage(this.activePage - 1)
+    this.totalPages = Math.ceil(this.$store.state.cards.length / 12)
+    if (this.totalPages < this.showingPagesButtons[2]) {
+      if (this.showingPagesButtons[2] === 3)
+        this.showingPagesButtons[2] = undefined
+      if (this.showingPagesButtons[2] > 3) {
+        this.showingPagesButtons[2] = this.totalPages
+        this.showingPagesButtons[1] = this.showingPagesButtons[2] - 1
+        this.showingPagesButtons[0] = this.showingPagesButtons[1] - 1
+      }
+    }
+    if (this.totalPages < this.showingPagesButtons[1])
+      if (this.showingPagesButtons[1] === 2 && !this.showingPagesButtons[2])
+        this.showingPagesButtons[1] = undefined
+    if (this.totalPages > 3 && this.showingPagesButtons[2] + 1 <= this.totalPages)
+      this.hasNext = true
+    if (this.showingPagesButtons[0] - 1 > 0)
+      this.hasPrev = true
+  }
+
   created() {
-    this.totalPages = Math.ceil(this.$store.state.employees.length / 12)
+    if(this.pageName === 'employees')
+      this.totalPages = Math.ceil(this.$store.state.employees.length / 12)
+    if(this.pageName === 'cards')
+      this.totalPages = Math.ceil(this.$store.state.cards.length / 12)
     for (let i = 1; i <= this.totalPages; i++) {
       this.showingPagesButtons.push(i)
       if (i === 3)

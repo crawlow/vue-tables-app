@@ -7,15 +7,16 @@ import Employees from '@views/pages/employees/employees.vue'
 import Points from '@views/pages/points/points.vue'
 import {
   DEFAULT,
-  EDITORCREATEEMPLOYEE,
+  EDITOR_CREATE_EMPLOYEE,
   EMPLOYEES,
   EMPLOYEES2,
   LOGIN,
   POINTS,
-  REFERENCESHOPBOOKS
+  REFERENCE_SHOP_BOOKS, SERVICE_CARDS
 } from './routerNames'
 import Employees2 from '@views/pages/employees/employees2.vue'
 import EditOrCreateEmployee from '@views/pages/employees/edit-or-create-employee.vue'
+import ServiceCards from '@views/pages/service-cards/service-cards.vue'
 //#region Admin
 const Layout = () => import('@/views/layouts/layout.vue')
 
@@ -52,7 +53,7 @@ const routes: Array<RouteRecordRaw> = [
         meta: {title: 'Сотрудники'}
       },
       {
-        name: REFERENCESHOPBOOKS,
+        name: REFERENCE_SHOP_BOOKS,
         path: 'reference-shop-books',
         component: ReferenceShopBooks,
         meta: {title: 'Справочник магазинов'}
@@ -71,8 +72,13 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: 'edit-or-create-employee',
-        name: EDITORCREATEEMPLOYEE,
+        name: EDITOR_CREATE_EMPLOYEE,
         component: EditOrCreateEmployee,
+      },
+      {
+        path: 'service-cards',
+        name: SERVICE_CARDS,
+        component: ServiceCards,
       }
     ],
   },

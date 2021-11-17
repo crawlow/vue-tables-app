@@ -18,7 +18,6 @@ export default class AppComponent extends Vue {
   padding: 0;
   box-sizing: border-box;
 }
-
 .el-select .el-input__inner {
   border: 1px solid #CED4DE !important;
   padding: 9px 0 9px 15px !important;
@@ -30,14 +29,29 @@ export default class AppComponent extends Vue {
   font-size: 14px !important;
   border-radius: 0;
 }
-
 .el-select .el-input__inner:focus {
   border: 1px solid #4F5C9C !important;
   color: #070054 !important;
 }
-
 .el-select-dropdown__item.selected {
   color: #070054 !important;
+}
+.el-date-editor .el-input__inner {
+  border: 1px solid #CED4DE;
+  color: #162147;
+  background: white;
+  height: 35px;
+  width: 100%;
+  outline: none;
+  font-size: 14px;
+  border-radius: 0;
+}
+.el-date-editor .el-input__inner:focus {
+  border: 1px solid #4F5C9C !important;
+  color: #070054 !important;
+}
+.el-date-editor.el-input, .el-date-editor.el-input__inner {
+  width: 100% !important;
 }
 button {
   cursor: pointer;

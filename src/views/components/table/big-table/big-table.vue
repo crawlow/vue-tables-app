@@ -31,6 +31,7 @@
       </div>
     </div>
     <pagination
+        page-name="employees"
         v-model:changePage="changeActivePage"
         v-model:active-page="activePage"
     ></pagination>
@@ -41,10 +42,11 @@
 import {Vue, Options, Prop, Emit} from 'vue-property-decorator'
 import {EmployeeType} from '@/store'
 import BigTableItem from '@views/components/table/big-table/big-table-item.vue'
+import Pagination from '@views/components/pagination.vue'
 
 @Options({
   name: 'big-table',
-  components: {BigTableItem}
+  components: {BigTableItem, Pagination}
 })
 export default class BigTable extends Vue {
   @Prop() employeePage!: number
