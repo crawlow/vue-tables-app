@@ -1,11 +1,44 @@
-import {createStore, Store, useStore as baseUseStore} from 'vuex'
-import {InjectionKey} from 'vue'
+import { createStore, Store, useStore as baseUseStore } from 'vuex'
+import { InjectionKey } from 'vue'
 
 export interface EmployeeType {
   id: number
   name: string
   position: 'admin' | 'guest'
   age: number
+}
+
+export class Events<T> {
+  private _handlers = new Array<((res: T) => any)>();
+  private _onceHandlers = new Array<((res: T) => any)>();
+  get handlers() {
+    return this._handlers.concat(this._onceHandlers);
+  }
+  once(callback: ((res: T) => any)) {
+    if (this._onceHandlers.indexOf(callback) === -1) {
+      this._onceHandlers.push(callback)
+    }
+  }
+  on(callback: ((res: T) => any)) {
+    if (this.handlers.indexOf(callback) === -1) {
+      this._handlers.push(callback)
+    }
+  }
+  removeListener(callback: ((res: T) => any)) {
+    let idx = this._handlers.indexOf(callback);
+    if (idx !== -1) {
+      this._handlers.splice(idx, 1);
+    } else {
+      idx = this._onceHandlers.indexOf(callback);
+      this._onceHandlers.splice(idx, 1);
+    }
+  }
+  trigger(args: T) {
+    // копируем, чтобы не очищать все onceHandlers, т.к. возможно что в обработчике кто-то подпишется на них
+    const onceHandlersCopy = this._onceHandlers.slice();
+    this.handlers.forEach(x => x(args));
+    this._onceHandlers = this._onceHandlers.filter(x => onceHandlersCopy.indexOf(x) === -1);
+  }
 }
 
 export interface ServiceCardType {
@@ -25,7 +58,8 @@ export interface State {
   isSidebarShowed: boolean
   isEdit: boolean
   editProduct: EmployeeType | undefined
-  cards: ServiceCardType[]
+  cards: ServiceCardType[],
+  globalEvent: Events<EmployeeType>
 }
 
 export default createStore<State>({
@@ -696,15 +730,21 @@ export default createStore<State>({
     ],
     isSidebarShowed: false,
     isEdit: false,
-    editProduct: undefined
+    editProduct: undefined,
+    globalEvent: new Events<EmployeeType>()
   },
   mutations: {
+    /**
+     * 
+     * @param state состояние
+     * @param card карта сотрудника
+     */
     addCard(state, card: ServiceCardType) {
       state.cards.push(card)
     },
     updateCard(state, card: ServiceCardType) {
       const index = state.cards.findIndex(e => e.id === card.id)
-      state.cards[index] = {...card}
+      state.cards[index] = { ...card }
     },
     deleteCard(state, index: number) {
       state.cards.splice(index, 1)
